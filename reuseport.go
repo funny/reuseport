@@ -18,9 +18,11 @@ import (
 const (
 	tcp4                  = 52 // "4"
 	tcp6                  = 54 // "6"
-	unsupportedProtoError = "Only tcp4 and tcp6 are supported"
+	unsupportedProtoError = "Only tcp, tcp4 and tcp6 are supported"
 	filePrefix            = "port."
 )
+
+var listenerBacklog = maxListenerBacklog()
 
 // getSockaddr parses protocol and address and returns implementor syscall.Sockaddr: syscall.SockaddrInet4 or syscall.SockaddrInet6.
 func getSockaddr(proto, addr string) (sa syscall.Sockaddr, soType int, err error) {
@@ -35,7 +37,7 @@ func getSockaddr(proto, addr string) (sa syscall.Sockaddr, soType int, err error
 		return nil, -1, err
 	}
 
-	switch proto[len(proto)-1] {
+	switch determineProto(proto, ip) {
 	default:
 		return nil, -1, errors.New(unsupportedProtoError)
 	case tcp4:
@@ -49,6 +51,20 @@ func getSockaddr(proto, addr string) (sa syscall.Sockaddr, soType int, err error
 		}
 		return &syscall.SockaddrInet6{Port: ip.Port, Addr: addr6}, syscall.AF_INET6, nil
 	}
+}
+
+// determineProto determines the protocol for syscall.Sockaddr (tcp4 or tcp6).
+func determineProto(proto string, ip *net.TCPAddr) byte {
+	// If the protocol is set to "tcp", we determine the actual protocol
+	// version from the size of the IP address. Otherwise, we use the
+	// protcol given to us by the caller.
+	if proto == "tcp" {
+		if ip.IP.To4() != nil {
+			return tcp4
+		}
+		return tcp6
+	}
+	return proto[len(proto)-1]
 }
 
 // NewReusablePortListener returns net.FileListener that created from a file discriptor for a socket with SO_REUSEPORT option.
@@ -73,6 +89,10 @@ func NewReusablePortListener(proto, addr string) (l net.Listener, err error) {
 		}
 	}()
 
+	if err = syscall.SetsockoptInt(fd, syscall.SOL_SOCKET, syscall.SO_REUSEADDR, 1); err != nil {
+		return nil, err
+	}
+
 	if err = syscall.SetsockoptInt(fd, syscall.SOL_SOCKET, reusePort, 1); err != nil {
 		return nil, err
 	}
@@ -82,7 +102,7 @@ func NewReusablePortListener(proto, addr string) (l net.Listener, err error) {
 	}
 
 	// Set backlog size to the maximum
-	if err = syscall.Listen(fd, syscall.SOMAXCONN); err != nil {
+	if err = syscall.Listen(fd, listenerBacklog); err != nil {
 		return nil, err
 	}
 
