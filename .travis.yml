@@ -11,6 +11,7 @@ go:
 os:
   - linux
   - osx
+  - windows
 
 before_install:
   - uname -a
