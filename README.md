@@ -6,7 +6,7 @@
 **GO_REUSEPORT** is a little expirement to create a `net.Listener` that supports [SO_REUSEPORT](http://lwn.net/Articles/542629/) socket option.
 
 For now, Darwin and Linux (from 3.9) systems are supported. I'll be pleased if you'll test other systems and tell me the results.
- documentation on [godoc.org](http://godoc.org/github.com/kavu/go_reuseport "go_reuseport documentation").
+ documentation on [godoc.org](http://godoc.org/github.com/fastgo/reuseport "go_reuseport documentation").
 
 ## Example ##
 
@@ -19,7 +19,7 @@ import (
   "net/http"
   "os"
   "runtime"
-  "github.com/kavu/go_reuseport"
+  "github.com/fastgo/reuseport"
 )
 
 func main() {
