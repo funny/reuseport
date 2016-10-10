@@ -1,12 +1,12 @@
 # GO_REUSEPORT
 
-[![Build Status](https://travis-ci.org/fastgo/reuseport.png?branch=master)](https://travis-ci.org/fastgo/reuseport)
-[![GoDoc](https://godoc.org/github.com/fastgo/reuseport?status.png)](https://godoc.org/github.com/fastgo/reuseport)
+[![Build Status](https://travis-ci.org/funny/reuseport.png?branch=master)](https://travis-ci.org/funny/reuseport)
+[![GoDoc](https://godoc.org/github.com/funny/reuseport?status.png)](https://godoc.org/github.com/funny/reuseport)
 
 **GO_REUSEPORT** is a little expirement to create a `net.Listener` that supports [SO_REUSEPORT](http://lwn.net/Articles/542629/) socket option.
 
 For now, Darwin and Linux (from 3.9) systems are supported. I'll be pleased if you'll test other systems and tell me the results.
- documentation on [godoc.org](http://godoc.org/github.com/fastgo/reuseport "go_reuseport documentation").
+ documentation on [godoc.org](http://godoc.org/github.com/funny/reuseport "go_reuseport documentation").
 
 ## Example ##
 
@@ -19,7 +19,7 @@ import (
   "net/http"
   "os"
   "runtime"
-  "github.com/fastgo/reuseport"
+  "github.com/funny/reuseport"
 )
 
 func main() {
