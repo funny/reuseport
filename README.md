@@ -1,6 +1,8 @@
 # GO_REUSEPORT
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/funny/reuseport)](https://goreportcard.com/report/github.com/funny/reuseport)
 [![Build Status](https://travis-ci.org/funny/reuseport.png?branch=master)](https://travis-ci.org/funny/reuseport)
+[![codecov](https://codecov.io/gh/funny/reuseport/branch/master/graph/badge.svg)](https://codecov.io/gh/funny/reuseport)
 [![GoDoc](https://godoc.org/github.com/funny/reuseport?status.png)](https://godoc.org/github.com/funny/reuseport)
 
 **GO_REUSEPORT** is a little expirement to create a `net.Listener` that supports [SO_REUSEPORT](http://lwn.net/Articles/542629/) socket option.
